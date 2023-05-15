@@ -1,0 +1,24 @@
+kernel EqualsTo: ImageComputationKernel<ePixelWise> {
+  Image<eRead, eAccessPoint, eEdgeClamped> src; // the input image (binary)
+  Image<eRead, eAccessPoint, eEdgeClamped> ref; // the reference image
+  // Checks if differences between two images is more than 1e6
+  // If it is .. that pel is coloured RED, otherwise its GREEN
+
+  Image<eWrite> dst; // the output image
+  
+  // pos gives the position of the kernel in the output image
+  void process(int2 pos) {
+    SampleType(dst) sample(0.0f);
+    SampleType(src) input = src();
+    SampleType(ref) ref_input = ref();
+    float error = fabs(input.x - ref_input.x);
+                   + fabs(input.y - ref_input.y)
+                   + fabs(input.z - ref_input.z);
+    if (error >0.000001)
+      sample.x = 1.0f;
+    else
+      sample.y = 1.0f;
+
+    dst() = sample;
+  }
+};

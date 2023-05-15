@@ -1,0 +1,81 @@
+set cut_paste_input [stack 0]
+version 11.3 v1
+BackdropNode {
+ inputs 0
+ name BackdropNode6
+ tile_color 0x71c67100
+ label "Validation Test"
+ note_font_size 42
+ selected true
+ xpos -3566
+ ypos 819
+ bdwidth 331
+ bdheight 299
+}
+push $cut_paste_input
+Dot {
+ name Dot1
+ label Input
+ note_font_size 32
+ note_font_color 0xff
+ selected true
+ xpos -3452
+ ypos 888
+}
+Reformat {
+ format "2048 1080 0 0 2048 1080 1 2K_DCP"
+ filter Impulse
+ name Reformat1
+ selected true
+ xpos -3486
+ ypos 926
+}
+Group {
+ name checkKernel3
+ selected true
+ xpos -3486
+ ypos 971
+ addUserKnob {20 checkKernel}
+ addUserKnob {41 "Local GPU: " T BlinkScript4.gpuName}
+ addUserKnob {41 "Use GPU if Available" T BlinkScript4.useGPUIfAvailable}
+ addUserKnob {26 ""}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -3100
+  ypos 1252
+ }
+ BlinkScript {
+  recompileCount 9
+  ProgramGroup 1
+  KernelDescription "2 \"checkKernel\" iterate pixelWise dbcaedd53032862306cf846fe83d493b3192e011217662159f486e7e2c839bcf 2 \"src\" Read Point \"dst\" Write Point 0 0 1 \"mu\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA=="
+  EncodedSource "1 680 yUR59vt7auTe9yVDGsfV3gdB6/9C2Q3qLY3097Dq+fKe1vrBxSjwQPi6gfZ3u71AeisF6AxWoPmFUlXrpSfEVA4AUPPBmAweN+uTegETo1vzz9gWJY//SbojsyX8MzLqfLxTW0oxBf10rtZ4EXCz8HnjDzm3cVFznaWbB7iu6AuTzNvLj+HwRqP4LyXmbQBKxIuMnSlvAl9wTj9Rxcv8o+yO2fbrpUA7B2M4b60WBOSwbAuHeSx50qOtTVvnsFDEs41bBp78MFQ054f8lpoPPzmS0FUi1CDXV96uOsosAYWr0W1S56bHvvm0HJMks4MPb4LDNGprQJdI9RpCfjwGBs/ofnfa/pn+Wo5JKyP3BjBndyCRhABkh2N4UtP+4klpjQhQlJjcv2eB/ZnRGOc48iUspqgXbkNkzCNpW/OlByVH8tQVsFr5IdEYkGB8rpr46AN3nP7trK+x2R46xwsttpq0fAmiTEV+MRGzokDKOvLuIPHUBvznOcAk0d/DPThOoCvLTdrHl9P6lOrP5YTBVszh7m8YKtj8/ErMAMxOGqUhAmmuwBVggA3WZcW73+tUz13RTIMvTvwt5DHiq/rCzcyLO+CsSP416mr+bRmdiVJU0EkEWLw77NPl0G5z4a5SVEr/y1fRoOPdXEM0By4XjmlikcKLxAujzpgJr0MmwTB8gy8yzqO3Uu+qxcHH3qknemnrj0zSkWSV4d33NbHlQO1M6f8POCyHFAr6uW4xcHhW7hKw3Z3XvM/rAFXZw2DxaTVlGo6frHQZ+j9bCWPghIxrIA/LO6u7U4XidUfUnwv4k0wL/ZkHt/nvJVGaQOXjkeFrTwVU8aaTgy+arF5q2gOQEAFSXUXE0mdZoR5e8BMmLHd2Sf5dmKbblKHchJyPWNKDyd+w9veLVWxLIf9enQ=="
+  rebuild ""
+  protectKernelWhenPublishing true
+  rebuild_finalise ""
+  name BlinkScript4
+  xpos -3100
+  ypos 1292
+ }
+ Output {
+  name Output1
+  xpos -3100
+  ypos 1392
+ }
+end_group
+PostageStamp {
+ name PostageStamp1
+ selected true
+ xpos -3486
+ ypos 1014
+ postage_stamp true
+}
+StickyNote {
+ inputs 0
+ name StickyNote5
+ label "The output must be green\nif the computation of the avg\nis correct for the golden image."
+ selected true
+ xpos -3395
+ ypos 1033
+}

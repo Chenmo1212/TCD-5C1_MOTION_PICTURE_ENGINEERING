@@ -1,0 +1,119 @@
+#! D:/Program/Nuke/nuke-14.0.2.dll -nx
+version 14.0 v2
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="62" y="102" w="1257" h="780" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="992" stretch="1"/>
+            <splitter orientation="2">
+                <split size="433"/>
+                <dock id="" activePageId="Viewer.1" focus="true">
+                    <page id="Viewer.1"/>
+                    <page id="Viewer.2"/>
+                </dock>
+                <split size="305"/>
+                <dock id="" activePageId="DAG.1">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="217"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+                <page id="Scenegraph.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "D:/OneDrive - 吐司工作室/Files/006_TCD/05_lectures/11_MPE(5C1 MOTION PICTURE ENGINEERING)/02_Lab/02_/Intro_blink.nk"
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ monitorOutLUT rec709
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Read {
+ inputs 0
+ file_type png
+ file "D:/OneDrive - 吐司工作室/Files/006_TCD/05_lectures/11_MPE(5C1 MOTION PICTURE ENGINEERING)/02_Lab/01_/flamingo.png"
+ format "640 471 0 0 640 471 1 "
+ origset true
+ name Read1
+ xpos 235
+ ypos -221
+}
+Dot {
+ name Dot3
+ xpos 269
+ ypos -93
+}
+set N2b1b1800 [stack 0]
+Dot {
+ name Dot2
+ xpos 395
+ ypos -93
+}
+BlinkScript {
+ recompileCount 10
+ ProgramGroup 1
+ KernelDescription "2 \"AverageKernel2\" iterate pixelWise c1abdedd7069212f2e8bcada9acb378853e92b19d8038f4a26792780196c5e02 2 \"src\" Read Point \"dst\" Write Point 0 0 1 \"w\" Float 3 1 AAAAAAAAAAAAAAAAAAAAAA=="
+ kernelSource "kernel AverageKernel2 : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src; // the input image\n  Image<eWrite> dst; // the output image\n\n  // local variables are shared by pixels\n  local:\n    float3 w;\n\n  void init() \{\n    w.x = 0.7f;\n    w.y = 0.1f;\n    w.z = 0.2f;\n  \}\n\n  void process() \{\n    // Read the input image\n    SampleType(src) input = src();\n\n    float avg = (w.x * input.x + w.y * input.y + w.z * input.z);\n\n    // Write the result to the output image\n    dst() = float4(avg, avg, avg, 1.0f);\n  \}\n\};"
+ rebuild ""
+ rebuild_finalise ""
+ name AverageKernel2
+ xpos 361
+ ypos -22
+}
+push $N2b1b1800
+BlinkScript {
+ recompileCount 5
+ ProgramGroup 1
+ KernelDescription "2 \"AverageKernel\" iterate pixelWise f753c0980f03ae68482b95be240ff4df496d28753a606e457d51d39b40f56d18 2 \"src\" Read Point \"dst\" Write Point 0 0 0"
+ kernelSource "\nkernel AverageKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src; // the input image\n  Image<eWrite> dst; // the output image\n\n  void process() \{\n    // Read the input image\n    SampleType(src) input = src();\n\n    float avg = (input.x + input.y + input.z) / 3.0f;\n\n    // Write the result to the output image\n    dst() = float4(avg, avg, avg, 1.0f);\n  \}\n\};\n"
+ rebuild ""
+ rebuild_finalise ""
+ name AverageKernel1
+ xpos 235
+ ypos -23
+}
+push $N2b1b1800
+Dot {
+ name Dot1
+ xpos 143
+ ypos -93
+}
+BlinkScript {
+ recompileCount 4
+ ProgramGroup 1
+ KernelDescription "2 \"InvertKernel\" iterate componentWise f8d91b59df76ceb7bd9a10b362de31f2131989717ab00a836f387cc079479f65 2 \"src\" Read Point \"dst\" Write Point 0 0 0"
+ kernelSource "\nkernel InvertKernel : ImageComputationKernel<eComponentWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src; // the input image\n  Image<eWrite> dst; // the output image\n\n  void process() \{\n    // Read the input image\n    float input = src();\n\n    // Write the result to the output image\n    dst() = 1 - input;\n  \}\n\};\n"
+ rebuild ""
+ rebuild_finalise ""
+ name InvertKernel
+ xpos 109
+ ypos -23
+}
+Viewer {
+ inputs 3
+ frame_range 1-100
+ input_number 1
+ monitorOutOutputTransform rec709
+ name Viewer1
+ xpos 235
+ ypos 109
+}

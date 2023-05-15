@@ -1,0 +1,229 @@
+#! D:/Program/Nuke/nuke-14.0.2.dll -nx
+version 14.0 v2
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="0" w="1257" h="780" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="594" stretch="1"/>
+            <splitter orientation="2">
+                <split size="433"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="305"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="615"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+                <page id="Scenegraph.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "D:/OneDrive - 吐司工作室/Files/006_TCD/05_lectures/11_MPE(5C1 MOTION PICTURE ENGINEERING)/02_Lab/01_/Exercise_3.nk"
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ monitorOutLUT rec709
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Read {
+ inputs 0
+ file_type png
+ file "D:/OneDrive - 吐司工作室/Files/006_TCD/05_lectures/11_MPE(5C1 MOTION PICTURE ENGINEERING)/02_Lab/01_/flamingo.png"
+ format "640 471 0 0 640 471 1 "
+ origset true
+ name Read1
+ xpos -212
+ ypos -168
+}
+Dot {
+ name Dot3
+ xpos 60
+ ypos -135
+}
+set N2b1b1800 [stack 0]
+Expression {
+ temp_name0 th
+ temp_expr0 0.15
+ expr0 "r * th"
+ expr1 "g * th"
+ expr2 b
+ name Expression1
+ xpos 26
+ ypos -32
+}
+push $N2b1b1800
+Dot {
+ name Dot2
+ xpos 164
+ ypos -135
+}
+set N2b1b1400 [stack 0]
+Dot {
+ name Dot1
+ xpos 281
+ ypos -135
+}
+set N2b1b1000 [stack 0]
+Expression {
+ expr0 0
+ expr1 0
+ expr2 y/height
+ channel3 none
+ name Expression3
+ xpos 247
+ ypos -31
+}
+push $N2b1b1400
+Expression {
+ inputs 1+1
+ temp_name0 p
+ temp_expr0 0.8
+ temp_name1 prg
+ temp_expr1 0.1
+ expr0 "r * prg + 0.01 * random()"
+ expr1 "g * prg + 0.01 * random()"
+ expr2 "b * p + 0.01 * random()"
+ maskChannelMask rgba.blue
+ name Expression2
+ xpos 130
+ ypos -31
+}
+push $N2b1b1000
+Dot {
+ name Dot4
+ xpos 407
+ ypos -135
+}
+Expression {
+ temp_name0 rc
+ temp_expr0 0.2126
+ temp_name1 gc
+ temp_expr1 0.7152
+ temp_name2 bc
+ temp_expr2 0.0722
+ expr0 r*rc+g*gc+b*bc
+ expr1 r*rc+g*gc+b*bc
+ expr2 r*rc+g*gc+b*bc
+ name Expression4
+ xpos 373
+ ypos -33
+}
+Blur {
+ size 3.3
+ name Blur1
+ xpos 373
+ ypos 5
+}
+set N2b1b0400 [stack 0]
+Matrix {
+ matrix {
+     {1 2 1}
+     {0 0 0}
+     {-1 -2 -1}
+   }
+ name Matrix1
+ xpos 305
+ ypos 70
+}
+Dot {
+ name Dot5
+ xpos 339
+ ypos 149
+}
+set N8210ac00 [stack 0]
+push $N2b1b0400
+Matrix {
+ matrix {
+     {1 0 -1}
+     {2 0 -2}
+     {1 0 -1}
+   }
+ name Matrix2
+ xpos 440
+ ypos 70
+}
+Dot {
+ name Dot6
+ xpos 474
+ ypos 150
+}
+set N8210b000 [stack 0]
+Merge2 {
+ inputs 2
+ operation hypot
+ name Merge2
+ xpos 460
+ ypos 204
+}
+push $N8210ac00
+Expression {
+ expr0 r*r
+ expr1 g*g
+ expr2 b*b
+ name Expression5
+ xpos 204
+ ypos 203
+}
+push $N8210b000
+Expression {
+ expr0 r*r
+ expr1 g*g
+ expr2 b*b
+ name Expression6
+ xpos 339
+ ypos 203
+}
+Merge2 {
+ inputs 2
+ operation plus
+ name Merge1
+ xpos 271
+ ypos 248
+}
+Expression {
+ expr0 sqrt(r)
+ expr1 sqrt(g)
+ expr2 sqrt(b)
+ name Expression7
+ xpos 271
+ ypos 285
+}
+Viewer {
+ inputs 2
+ frame 1
+ frame_range 1-100
+ input_number 1
+ channels rgb
+ monitorOutOutputTransform rec709
+ name Viewer1
+ xpos 374
+ ypos 344
+}
+StickyNote {
+ inputs 0
+ name StickyNote1
+ label "This is the effect \nusing this merge node."
+ xpos 449
+ ypos 233
+}

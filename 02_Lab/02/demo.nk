@@ -1,0 +1,330 @@
+#! D:/TCDProgram/Nuke14.0v2/nuke-14.0.2.dll -nx
+version 14.0 v2
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="0" w="1917" h="991" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="1254" stretch="1"/>
+            <splitter orientation="2">
+                <split size="557"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="392"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="615"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+                <page id="Scenegraph.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name E:/post_graduate/2/Motion_Picture/lab2/.nk
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ monitorOutLUT rec709
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ tile_color 0xaaaaaa00
+ note_font_size 42
+ xpos -566
+ ypos 281
+ bdheight 108
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode2
+ tile_color 0x8e388e00
+ note_font_size 42
+ xpos -414
+ ypos 277
+ bdheight 108
+}
+StickyNote {
+ inputs 0
+ name StickyNote1
+ label "apply a day for night effect"
+ xpos 161
+ ypos 41
+}
+Read {
+ inputs 0
+ file_type tiff
+ file E:/post_graduate/2/Motion_Picture/lab2/Tobago_HD.tif
+ format "1920 1080 0 0 1920 1080 1 HD_1080"
+ origset true
+ name Read2
+ xpos 8
+ ypos -93
+}
+set N1a4f1c00 [stack 0]
+Expression {
+ expr0 "(y / height) ** 0.5"
+ expr1 0
+ expr2 0
+ name gradient
+ xpos 8
+ ypos 7
+}
+push $N1a4f1c00
+Dot {
+ name Dot1
+ xpos 199
+ ypos -60
+}
+Expression {
+ inputs 1+1
+ temp_name0 prg
+ temp_expr0 3
+ temp_name1 tb
+ temp_expr1 0.5
+ expr0 "r ** prg + 0.01 * random()"
+ expr1 "g ** prg + 0.01 * random()"
+ expr2 "b * pb + 0.1 * random()"
+ maskChannelMask rgba.red
+ name day_4_night
+ xpos 165
+ ypos 7
+}
+Read {
+ inputs 0
+ file_type png
+ file E:/post_graduate/2/Motion_Picture/lab2/flamingo.png
+ format "640 471 0 0 640 471 1 my_new_format"
+ origset true
+ name Read1
+ xpos -220
+ ypos -93
+}
+set N1a4f0400 [stack 0]
+Constant {
+ inputs 0
+ channels rgb
+ color {0.03101253882 0.1574023068 0.01485741697 0.03101253882}
+ format "640 471 0 0 640 471 1 my_new_format"
+ name Constant1
+ xpos -62
+ ypos -190
+}
+Merge2 {
+ inputs 2
+ operation difference
+ name Merge1
+ xpos -220
+ ypos -166
+}
+push $N1a4f0400
+Expression {
+ expr0 "r < 0.5"
+ name flamingo_mask
+ xpos -220
+ ypos 17
+}
+Constant {
+ inputs 0
+ channels rgb
+ color 1
+ format "3 3 0 0 3 3 1 format3x3"
+ name Constant2
+ xpos -613
+ ypos -225
+}
+Reformat {
+ format "9 9 0 0 9 9 1 format9x9"
+ name Reformat1
+ xpos -613
+ ypos -126
+}
+push $N1a4f0400
+Dot {
+ name Dot2
+ xpos -365
+ ypos -60
+}
+set N1a4f0c00 [stack 0]
+Convolve2 {
+ inputs 2
+ filter_channel rgba.red
+ name Convolve1
+ xpos -613
+ ypos -69
+}
+push $N1a4f0c00
+Blur {
+ size 10
+ name Blur1
+ xpos -612
+ ypos -1
+}
+push $N1a4f0c00
+Matrix {
+ matrix {
+     {1 1 1}
+     {1 1 1}
+     {1 1 1}
+   }
+ name Matrix1
+ xpos -464
+ ypos -157
+}
+push $N1a4f0c00
+Matrix {
+ matrix {
+     {1 1 1 1 1 1 1 1 1}
+     {1 1 1 1 1 1 1 1 1}
+     {1 1 1 1 1 1 1 1 1}
+     {1 1 1 1 1 1 1 1 1}
+     {1 1 1 1 1 1 1 1 1}
+     {1 1 1 1 1 1 1 1 1}
+     {1 1 1 1 1 1 1 1 1}
+     {1 1 1 1 1 1 1 1 1}
+     {1 1 1 1 1 1 1 1 1}
+   }
+ normalize true
+ name Matrix2
+ xpos -342
+ ypos -158
+}
+StickyNote {
+ inputs 0
+ name StickyNote2
+ label "Edge Detection (Sobel)"
+ xpos -233
+ ypos 134
+}
+push $N1a4f0c00
+Expression {
+ temp_name0 rc
+ temp_expr0 0.21
+ temp_name1 gc
+ temp_expr1 0.71
+ temp_name2 bc
+ temp_expr2 0.07
+ expr0 "rc * r + gc * g + bc * b"
+ expr1 "rc * r + gc * g + bc * b"
+ expr2 "rc * r + gc * g + bc * b"
+ maskChannelMask rgba.red
+ name luminance
+ xpos -399
+ ypos 10
+}
+Blur {
+ size 1
+ name Blur2
+ xpos -399
+ ypos 56
+}
+set N86dbd400 [stack 0]
+Matrix {
+ matrix {
+     {1 0 -1}
+     {2 0 -2}
+     {1 0 -1}
+   }
+ name Gx_Matrix
+ xpos -462
+ ypos 128
+}
+set N8464f000 [stack 0]
+push $N86dbd400
+Matrix {
+ matrix {
+     {1 2 1}
+     {0 0 0}
+     {-1 -2 -1}
+   }
+ name Gy_Matrix
+ xpos -336
+ ypos 128
+}
+set N8464f400 [stack 0]
+Merge2 {
+ inputs 2
+ operation hypot
+ name Merge3
+ xpos -556
+ ypos 361
+}
+push $N8464f000
+Expression {
+ expr0 r*r
+ expr1 g*g
+ expr2 b*b
+ name Expression1
+ xpos -555
+ ypos 215
+}
+push $N8464f400
+Expression {
+ expr0 r*r
+ expr1 g*g
+ expr2 b*b
+ name Expression2
+ xpos -261
+ ypos 212
+}
+Merge2 {
+ inputs 2
+ operation plus
+ name Merge2
+ xpos -261
+ ypos 280
+}
+Expression {
+ expr0 sqrt(r)
+ expr1 sqrt(g)
+ expr2 sqrt(b)
+ name Expression3
+ xpos -261
+ ypos 357
+}
+push $N8464f000
+push $N8464f400
+MergeExpression {
+ inputs 2
+ expr0 (Ar**2+Br**2)**(0.5)
+ expr1 (Ag**2+Bg**2)**(0.5)
+ expr2 (Ab**2+Bb**2)**(0.5)
+ name MergeExpression1
+ xpos -404
+ ypos 357
+}
+Viewer {
+ inputs 3
+ frame 1
+ frame_range 1-100
+ input_number 2
+ channels {rgba.red rgba.green rgba.blue rgba.red}
+ colour_sample_bbox {-0.231250003 0.0859375 -0.228125006 0.08906249702}
+ samplepoints {{-0.231250003 0.0859375}
+   }
+ softSelect true
+ monitorOutOutputTransform rec709
+ name Viewer1
+ xpos -404
+ ypos 425
+}

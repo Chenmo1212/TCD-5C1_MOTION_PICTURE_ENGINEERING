@@ -1,0 +1,202 @@
+#! D:/Program/Nuke/nuke-14.0.2.dll -nx
+version 14.0 v2
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="0" w="1257" h="780" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="678" stretch="1"/>
+            <splitter orientation="2">
+                <split size="274"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="464"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="531"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+                <page id="Scenegraph.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "D:/OneDrive - 吐司工作室/Files/006_TCD/05_lectures/11_MPE(5C1 MOTION PICTURE ENGINEERING)/02_Lab/02_/Final2.nk"
+ frame 22
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ monitorOutLUT rec709
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Read {
+ inputs 0
+ file_type mov
+ file "D:/OneDrive - 吐司工作室/Files/006_TCD/05_lectures/11_MPE(5C1 MOTION PICTURE ENGINEERING)/02_Lab/02_/Hula_cin.mov"
+ format "2048 1080 0 0 2048 1080 1 2K_DCP"
+ last 68
+ origlast 68
+ origset true
+ name Read2
+ xpos -916
+ ypos 307
+}
+set Ncddfd800 [stack 0]
+Colorspace {
+ colorspace_out YCbCr
+ name Colorspace2
+ xpos -763
+ ypos 337
+}
+PostageStamp {
+ name PostageStamp2
+ xpos -763
+ ypos 361
+ postage_stamp true
+}
+Constant {
+ inputs 0
+ channels rgb
+ color {0.7822632194 0.4404108524 0.07613453269 0.7822632194}
+ format "2048 1080 0 0 2048 1080 1 2K_DCP"
+ name BGC
+ xpos -659
+ ypos 362
+}
+Merge2 {
+ inputs 2
+ operation minus
+ name Merge3
+ xpos -763
+ ypos 456
+}
+Expression {
+ expr0 r*r
+ expr1 g*g
+ expr2 b*b
+ name Channel_square
+ xpos -763
+ ypos 495
+}
+Constant {
+ inputs 0
+ channels rgb
+ color {0.03 0.0003 0.003 0}
+ format "2048 1080 0 0 2048 1080 1 2K_DCP"
+ name Sigma
+ xpos -552
+ ypos 361
+}
+Expression {
+ expr0 2*r
+ expr1 2*g
+ expr2 2*b
+ name Twice_Sigma
+ xpos -552
+ ypos 534
+}
+Merge2 {
+ inputs 2
+ operation divide
+ name Merge4
+ xpos -763
+ ypos 534
+}
+Expression {
+ expr0 r+g+b
+ expr1 r+g+b
+ expr2 r+g+b
+ name Expression9
+ xpos -763
+ ypos 574
+}
+Expression {
+ temp_name0 radio
+ temp_expr0 20
+ expr0 r<radio
+ expr1 g<radio
+ expr2 b<radio
+ maskChannelMask rgba.red
+ name Expression10
+ xpos -763
+ ypos 613
+}
+set Nb243a000 [stack 0]
+Read {
+ inputs 0
+ file_type tiff
+ file "D:/OneDrive - 吐司工作室/Files/006_TCD/05_lectures/11_MPE(5C1 MOTION PICTURE ENGINEERING)/02_Lab/01_/Tobago_HD(2).tif"
+ format "2048 1080 0 0 2048 1080 1 2K_DCP"
+ origset true
+ name Read4
+ xpos -489
+ ypos 583
+}
+Expression {
+ inputs 1+1
+ expr0 0
+ expr1 0
+ expr2 0
+ maskChannelMask rgba.red
+ invert_mask true
+ name Expression8
+ xpos -599
+ ypos 613
+}
+set Nc633bc00 [stack 0]
+push $Nb243a000
+push $Ncddfd800
+Expression {
+ inputs 1+1
+ expr0 0
+ expr1 0
+ expr2 0
+ maskChannelMask rgba.red
+ name Expression7
+ xpos -916
+ ypos 612
+}
+set Nb4165c00 [stack 0]
+push $Nb4165c00
+push $Nc633bc00
+MergeExpression {
+ inputs 2
+ expr0 Ar+Br
+ expr1 Ag+Bg
+ expr2 Ab+Bb
+ name MergeExpression2
+ xpos -760
+ ypos 669
+}
+Viewer {
+ inputs 3
+ frame 22
+ frame_range 1-65
+ frame_range_lock true
+ channels {rgba.red rgba.green rgba.blue rgba.red}
+ colour_sample_bbox {0.958984375 -0.171875 0.9599609375 -0.1708984375}
+ samplepoints {{0.958984375 -0.171875}
+   }
+ monitorOutOutputTransform rec709
+ name Viewer2
+ xpos -760
+ ypos 765
+}

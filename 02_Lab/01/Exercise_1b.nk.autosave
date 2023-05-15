@@ -1,0 +1,107 @@
+#! D:/Program/Nuke/nuke-14.0.2.dll -nx
+version 14.0 v2
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="0" w="1257" h="780" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="594" stretch="1"/>
+            <splitter orientation="2">
+                <split size="433"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="305"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="615"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+                <page id="Scenegraph.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "D:/OneDrive - 吐司工作室/Files/006_TCD/05_lectures/11_MPE(5C1 MOTION PICTURE ENGINEERING)/02_Lab/01_/Exercise_1b.nk"
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ monitorOutLUT rec709
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Read {
+ inputs 0
+ file_type png
+ file "D:/OneDrive - 吐司工作室/Files/006_TCD/05_lectures/11_MPE(5C1 MOTION PICTURE ENGINEERING)/02_Lab/01_/flamingo.png"
+ format "640 471 0 0 640 471 1 "
+ origset true
+ name Read1
+ xpos 130
+ ypos -146
+}
+set N3882d400 [stack 0]
+Expression {
+ temp_name0 th
+ temp_expr0 0.15
+ expr0 "r * th"
+ expr1 "g * th"
+ expr2 b
+ name Expression1
+ xpos 26
+ ypos -32
+}
+push $N3882d400
+Expression {
+ expr0 0
+ expr1 0
+ expr2 y/height
+ channel3 none
+ name Expression3
+ xpos 247
+ ypos -31
+}
+set N2b1b0000 [stack 0]
+push $N2b1b0000
+push $N3882d400
+Expression {
+ inputs 1+1
+ temp_name0 p
+ temp_expr0 0.8
+ temp_name1 prg
+ temp_expr1 0.1
+ expr0 "r * prg + 0.01 * random()"
+ expr1 "g * prg + 0.01 * random()"
+ expr2 "b * p + 0.01 * random()"
+ maskChannelMask rgba.blue
+ name Expression2
+ xpos 130
+ ypos -31
+}
+Viewer {
+ inputs 2
+ frame 1
+ frame_range 1-100
+ input_number 1
+ channels rgb
+ monitorOutOutputTransform rec709
+ name Viewer1
+ xpos 130
+ ypos 46
+}

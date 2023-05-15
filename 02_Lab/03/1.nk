@@ -1,0 +1,360 @@
+#! D:/Program/Nuke/nuke-14.0.2.dll -nx
+version 14.0 v2
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="0" w="1257" h="780" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="661" stretch="1"/>
+            <splitter orientation="2">
+                <split size="210"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="528"/>
+                <dock id="" activePageId="DAG.1">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="548"/>
+            <dock id="" activePageId="Properties.1" focus="true">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+                <page id="Scenegraph.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "D:/OneDrive - 吐司工作室/Files/006_TCD/05_lectures/11_MPE(5C1 MOTION PICTURE ENGINEERING)/02_Lab/03_/1.nk"
+ frame 44
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ monitorOutLUT rec709
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode6
+ tile_color 0x71c67100
+ label "Validation Test"
+ note_font_size 42
+ xpos 720
+ ypos 358
+ bdwidth 331
+ bdheight 299
+}
+StickyNote {
+ inputs 0
+ name StickyNote5
+ label "The output must be green\nif the computation of the avg\nis correct for the golden image."
+ xpos 881
+ ypos 568
+}
+Read {
+ inputs 0
+ file_type mov
+ file "D:/OneDrive - 吐司工作室/Files/006_TCD/05_lectures/11_MPE(5C1 MOTION PICTURE ENGINEERING)/02_Lab/02_/Hula_cin.mov"
+ format "2048 1080 0 0 2048 1080 1 2K_DCP"
+ last 68
+ origlast 68
+ origset true
+ name Read2
+ xpos 17
+ ypos -117
+}
+set N9a066c00 [stack 0]
+Colorspace {
+ colorspace_out YCbCr
+ name Colorspace2
+ xpos 170
+ ypos -87
+}
+PostageStamp {
+ name PostageStamp2
+ xpos 170
+ ypos -63
+ postage_stamp true
+}
+Constant {
+ inputs 0
+ channels rgb
+ color {0.7822632194 0.4404108524 0.07613453269 0.7822632194}
+ format "2048 1080 0 0 2048 1080 1 2K_DCP"
+ name BGC
+ xpos 274
+ ypos -62
+}
+Merge2 {
+ inputs 2
+ operation minus
+ name Merge3
+ xpos 170
+ ypos 32
+}
+Expression {
+ expr0 r*r
+ expr1 g*g
+ expr2 b*b
+ name Channel_square
+ xpos 170
+ ypos 71
+}
+Constant {
+ inputs 0
+ channels rgb
+ color {0.03 0.0003 0.003 0}
+ format "2048 1080 0 0 2048 1080 1 2K_DCP"
+ name Sigma
+ xpos 381
+ ypos -63
+}
+Expression {
+ expr0 2*r
+ expr1 2*g
+ expr2 2*b
+ name Twice_Sigma
+ xpos 381
+ ypos 110
+}
+Merge2 {
+ inputs 2
+ operation divide
+ name Merge4
+ xpos 170
+ ypos 110
+}
+Expression {
+ expr0 r+g+b
+ expr1 r+g+b
+ expr2 r+g+b
+ name Expression9
+ xpos 170
+ ypos 150
+}
+Expression {
+ temp_name0 radio
+ temp_expr0 22
+ expr0 r<radio
+ expr1 g<radio
+ expr2 b<radio
+ maskChannelMask rgba.red
+ name Expression10
+ xpos 170
+ ypos 189
+}
+set N9a09d400 [stack 0]
+push $N9a066c00
+Expression {
+ inputs 1+1
+ expr0 0
+ expr1 0
+ expr2 0
+ maskChannelMask rgba.red
+ name Expression7
+ xpos 17
+ ypos 189
+}
+set N9a09d800 [stack 0]
+push $N9a09d400
+Read {
+ inputs 0
+ file_type tiff
+ file "D:/OneDrive - 吐司工作室/Files/006_TCD/05_lectures/11_MPE(5C1 MOTION PICTURE ENGINEERING)/02_Lab/01_/Tobago_HD(2).tif"
+ format "2048 1080 0 0 2048 1080 1 2K_DCP"
+ origset true
+ name Read4
+ xpos 444
+ ypos 159
+}
+Expression {
+ inputs 1+1
+ expr0 0
+ expr1 0
+ expr2 0
+ maskChannelMask rgba.red
+ invert_mask true
+ name Expression8
+ xpos 334
+ ypos 189
+}
+set Nf1df4000 [stack 0]
+MergeExpression {
+ inputs 2
+ expr0 Ar+Br
+ expr1 Ag+Bg
+ expr2 Ab+Bb
+ name MergeExpression2
+ xpos 17
+ ypos 269
+}
+push $Nf1df4000
+push $N9a09d800
+push $N9a09d400
+Viewer {
+ inputs 4
+ frame_range 1-65
+ frame_range_lock true
+ channels {rgba.red rgba.green rgba.blue rgba.red}
+ colour_sample_bbox {0.958984375 -0.171875 0.9599609375 -0.1708984375}
+ samplepoints {{0.958984375 -0.171875}
+   }
+ monitorOutOutputTransform rec709
+ name Viewer2
+ xpos 170
+ ypos 337
+}
+ColorWheel {
+ inputs 0
+ gamma 0.45
+ name ColorWheel1
+ xpos 1769
+ ypos 150
+}
+Read {
+ inputs 0
+ file_type exr
+ file C:/Users/chenmo/Desktop/goldenImage(1).exr
+ format "256 256 0 0 256 256 1 square_256"
+ origset true
+ name Read1
+ xpos 800
+ ypos 87
+}
+set N9a020400 [stack 0]
+BlinkScript {
+ recompileCount 1
+ ProgramGroup 1
+ KernelDescription "2 \"BoxFilter4\" iterate componentWise e2cfcec6c98f22b258fb31ee76b2b3d0fb92b338089f39f5e1041b13276ff776 2 \"src\" Read Random \"dst\" Write Point 0 0 2 \"size\" Int 1 1 AAAAAA== \"nxn\" Float 1 1 AAAAAA=="
+ kernelSource "kernel BoxFilter4 : ImageComputationKernel<eComponentWise>\n\{\nImage<eRead, eAccessRandom, eEdgeClamped> src;\nImage<eWrite> dst;\n\nlocal:\n\tint size;\n\tfloat nxn;\n\n\tvoid init() \{\n\t\tsize = 256;\n\t\tnxn = float(256 * 256);\n\t\}\n\n\tvoid process(int2 pos) \{\n\t\tfloat sum = 0;\n\t\tfor (int i = size/2; i < size; i++) \{\n\t\t\tfor (int j = size/2; j < size; j++) \{\n\t\t\t\tsum += src(pos.x + i, pos.y + j);\n\t\t\t\}\n\t\t\}\n\t\tdst() = sum / (nxn/4);\n\t\}\n\};"
+ rebuild ""
+ format "128 128 0 0 128 128 1.46 test3"
+ specifiedFormat true
+ rebuild_finalise ""
+ name BlinkScript5
+ xpos 962
+ ypos 210
+}
+push $N9a020400
+BlinkScript {
+ recompileCount 2
+ ProgramGroup 1
+ KernelDescription "2 \"BoxFilter3\" iterate componentWise cce6c41c7c81b8235ca3f9868da7e65555ba95cb56bc4a19b7e66a066a7dfab1 2 \"src\" Read Random \"dst\" Write Point 0 0 2 \"size\" Int 1 1 AAAAAA== \"nxn\" Float 1 1 AAAAAA=="
+ kernelSource "kernel BoxFilter3 : ImageComputationKernel<eComponentWise>\n\{\nImage<eRead, eAccessRandom, eEdgeClamped> src;\nImage<eWrite> dst;\n\nlocal:\n\tint size;\n\tfloat nxn;\n\n\tvoid init() \{\n\t\tsize = 256;\n\t\tnxn = float(256 * 256);\n\t\}\n\n\tvoid process(int2 pos) \{\n\t\tfloat sum = 0;\n\t\tfor (int i = size/2; i <size; i++) \{\n\t\t\tfor (int j = 0; j < size/2; j++) \{\n\t\t\t\tsum += src(pos.x + i, pos.y + j);\n\t\t\t\}\n\t\t\}\n\t\tdst() = sum / (nxn/4);\n\t\}\n\};"
+ rebuild ""
+ format "128 128 0 0 128 128 1.46 test3"
+ specifiedFormat true
+ rebuild_finalise ""
+ name BlinkScript4
+ xpos 860
+ ypos 210
+}
+push $N9a020400
+BlinkScript {
+ ProgramGroup 1
+ kernelSource "kernel BoxFilter2 : ImageComputationKernel<eComponentWise>\n\{\nImage<eRead, eAccessRandom, eEdgeClamped> src;\nImage<eWrite> dst;\n\nlocal:\n\tint size;\n\tfloat nxn;\n\n\tvoid init() \{\n\t\tsize = 256;\n\t\tnxn = float(256 * 256);\n\t\}\n\n\tvoid process(int2 pos) \{\n\t\tfloat sum = 0;\n\t\tfor (int i = 0; i < size/2; i++) \{\n\t\t\tfor (int j = size/2; j < size; j++) \{\n\t\t\t\tsum += src(pos.x + i, pos.y + j);\n\t\t\t\}\n\t\t\}\n\t\tdst() = sum / (nxn/4);\n\t\}\n\};"
+ rebuild ""
+ format "128 128 0 0 128 128 1.46 test3"
+ specifiedFormat true
+ rebuild_finalise ""
+ name BlinkScript3
+ xpos 761
+ ypos 210
+}
+push $N9a020400
+BlinkScript {
+ recompileCount 13
+ ProgramGroup 1
+ KernelDescription "2 \"BoxFilter\" iterate componentWise 91e8aa503d3bdda03d4866de933908aed5285f0622a51968b862841c043de304 2 \"src\" Read Random \"dst\" Write Point 0 0 2 \"size\" Int 1 1 AAAAAA== \"nxn\" Float 1 1 AAAAAA=="
+ kernelSource "kernel BoxFilter : ImageComputationKernel<eComponentWise>\n\{\nImage<eRead, eAccessRandom, eEdgeClamped> src;\nImage<eWrite> dst;\n\nlocal:\n\tint size;\n\tfloat nxn;\n\n\tvoid init() \{\n\t\tsize = 256;\n\t\tnxn = float(256 * 256);\n\t\}\n\n\tvoid process(int2 pos) \{\n\t\tfloat sum = 0;\n\t\tfor (int i = 0; i < size/2; i++) \{\n\t\t\tfor (int j = 0; j < size/2; j++) \{\n\t\t\t\tsum += src(pos.x + i, pos.y + j);\n\t\t\t\}\n\t\t\}\n\t\tdst() = sum / (nxn/4);\n\t\}\n\};"
+ rebuild ""
+ format "128 128 0 0 128 128 1.46 test3"
+ specifiedFormat true
+ rebuild_finalise ""
+ name BlinkScript1
+ xpos 656
+ ypos 210
+}
+BlinkScript {
+ inputs 4
+ recompileCount 8
+ ProgramGroup 1
+ KernelDescription "2 \"reduceKernel\" iterate componentWise e58918635f931dd72da1e8e6d6bb1241323a053e0247fe71fdf2157ee46a1437 5 \"src1\" Read Random \"src2\" Read Random \"src3\" Read Random \"src4\" Read Random \"dst\" Write Point 0 0 0"
+ kernelSource "kernel reduceKernel : ImageComputationKernel<eComponentWise>\n\{\nImage<eRead, eAccessRandom, eEdgeClamped> src1; // the input image1\nImage<eRead, eAccessRandom, eEdgeClamped> src2; // the input image2\nImage<eRead, eAccessRandom, eEdgeClamped> src3; // the input image3\nImage<eRead, eAccessRandom, eEdgeClamped> src4; // the input image4\nImage<eWrite> dst; // the output image\n\nvoid process(int2 pos) \{\n\t// Output position\n\tint x = pos.x;\n\tint y = pos.y;\n           \n          float input1, input2, input3, input4;\n          if (x <= 128 & y <=128) \{\n              input1 = src1(128 * x, 128 * y);\n          \}\n          else if (x <= 128 & y > 128) \{\n              input2 = src2(128 * x, 128 * y);\n          \}\n          else if (x > 128 & y <= 128) \{\n              input3 = src3(128 * x, 128 * y);\n          \}\n          else if (x > 128 & y > 128) \{\n              input4 = src4(128 * x, 128 * y);\n          \}\n\t// Write the result to the output image\n\tdst() = (input1 + input2 + input3 + input4) / 4;\n\}\n\};"
+ rebuild ""
+ format "1 1 0 0 1 1 1 test"
+ specifiedFormat true
+ rebuild_finalise ""
+ name BlinkScript2
+ selected true
+ xpos 800
+ ypos 288
+}
+Dot {
+ name Dot1
+ label Input
+ note_font_size 32
+ note_font_color 0xff
+ xpos 834
+ ypos 427
+}
+Reformat {
+ format "2048 1080 0 0 2048 1080 1 2K_DCP"
+ filter impulse
+ name Reformat1
+ xpos 800
+ ypos 465
+}
+Group {
+ name checkKernel3
+ xpos 800
+ ypos 510
+ addUserKnob {20 checkKernel}
+ addUserKnob {41 "Local GPU: " T BlinkScript4.gpuName}
+ addUserKnob {41 "Use GPU if Available" T BlinkScript4.useGPUIfAvailable}
+ addUserKnob {26 ""}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -3100
+  ypos 1252
+ }
+ BlinkScript {
+  recompileCount 9
+  ProgramGroup 1
+  KernelDescription "2 \"checkKernel\" iterate pixelWise dbcaedd53032862306cf846fe83d493b3192e011217662159f486e7e2c839bcf 2 \"src\" Read Point \"dst\" Write Point 0 0 1 \"mu\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA=="
+  EncodedSource "1 680 yUR59vt7auTe9yVDGsfV3gdB6/9C2Q3qLY3097Dq+fKe1vrBxSjwQPi6gfZ3u71AeisF6AxWoPmFUlXrpSfEVA4AUPPBmAweN+uTegETo1vzz9gWJY//SbojsyX8MzLqfLxTW0oxBf10rtZ4EXCz8HnjDzm3cVFznaWbB7iu6AuTzNvLj+HwRqP4LyXmbQBKxIuMnSlvAl9wTj9Rxcv8o+yO2fbrpUA7B2M4b60WBOSwbAuHeSx50qOtTVvnsFDEs41bBp78MFQ054f8lpoPPzmS0FUi1CDXV96uOsosAYWr0W1S56bHvvm0HJMks4MPb4LDNGprQJdI9RpCfjwGBs/ofnfa/pn+Wo5JKyP3BjBndyCRhABkh2N4UtP+4klpjQhQlJjcv2eB/ZnRGOc48iUspqgXbkNkzCNpW/OlByVH8tQVsFr5IdEYkGB8rpr46AN3nP7trK+x2R46xwsttpq0fAmiTEV+MRGzokDKOvLuIPHUBvznOcAk0d/DPThOoCvLTdrHl9P6lOrP5YTBVszh7m8YKtj8/ErMAMxOGqUhAmmuwBVggA3WZcW73+tUz13RTIMvTvwt5DHiq/rCzcyLO+CsSP416mr+bRmdiVJU0EkEWLw77NPl0G5z4a5SVEr/y1fRoOPdXEM0By4XjmlikcKLxAujzpgJr0MmwTB8gy8yzqO3Uu+qxcHH3qknemnrj0zSkWSV4d33NbHlQO1M6f8POCyHFAr6uW4xcHhW7hKw3Z3XvM/rAFXZw2DxaTVlGo6frHQZ+j9bCWPghIxrIA/LO6u7U4XidUfUnwv4k0wL/ZkHt/nvJVGaQOXjkeFrTwVU8aaTgy+arF5q2gOQEAFSXUXE0mdZoR5e8BMmLHd2Sf5dmKbblKHchJyPWNKDyd+w9veLVWxLIf9enQ=="
+  rebuild ""
+  protectKernelWhenPublishing true
+  rebuild_finalise ""
+  name BlinkScript4
+  xpos -3100
+  ypos 1292
+ }
+ Output {
+  name Output1
+  xpos -3100
+  ypos 1392
+ }
+end_group
+PostageStamp {
+ name PostageStamp1
+ xpos 800
+ ypos 553
+ postage_stamp true
+}

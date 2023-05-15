@@ -1,0 +1,129 @@
+#! C:/Program Files/Nuke11.1v1/nuke-11.1.1.dll -nx
+#write_info Write1 file:"D:/Trinity/5c1/Data/HulaSub/Hula.Motion.%4d.tiff" format:"2048 1080 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"46 50" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
+version 11.1 v1
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="0" w="3816" h="2026" screen="0">
+        <splitter orientation="1">
+            <split size="58"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="3135" stretch="1"/>
+            <splitter orientation="2">
+                <split size="1147"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="807"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="615"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name D:/Trinity/5c1/Data/MotionCompensation.nk
+ frame 49
+ first_frame 46
+ last_frame 50
+ lock_range true
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Read {
+ inputs 0
+ file D:/Trinity/5c1/Data/HulaSub/Hula.#####.tiff
+ format "2048 1080 0 0 2048 1080 1 2K_DCP"
+ first 46
+ last 50
+ origfirst 46
+ origlast 50
+ origset true
+ name Read1
+ xpos -1011
+ ypos -192
+}
+set Ne5680a80 [stack 0]
+VectorGenerator {
+ Advanced 1
+ name VectorGenerator1
+ xpos -757
+ ypos -134
+}
+set Ne5680380 [stack 0]
+Shuffle {
+ in motion
+ name Shuffle1
+ xpos -559
+ ypos -132
+}
+Write {
+ file D:/Trinity/5c1/Data/HulaSub/Hula.Motion.%4d.tiff
+ file_type tiff
+ checkHashOnRead false
+ version 1
+ name Write1
+ xpos -454
+ ypos -43
+}
+push $Ne5680a80
+TimeOffset {
+ time_offset 1
+ time ""
+ name TimeOffset1
+ xpos -1046
+ ypos -47
+}
+push $Ne5680380
+ShuffleCopy {
+ inputs 2
+ in2 motion
+ red red
+ green green
+ blue blue
+ black blue2
+ white alpha2
+ out2 backward
+ name ShuffleCopy1
+ xpos -701
+ ypos -76
+}
+set Na3296e00 [stack 0]
+IDistort {
+ uv backward
+ filter Simon
+ name IDistort1
+ xpos -593
+ ypos -41
+}
+push $Na3296e00
+push $Ne5680a80
+Viewer {
+ inputs 3
+ frame 49
+ frame_range 46-50
+ input_number 2
+ name Viewer1
+ selected true
+ xpos -911
+ ypos 32
+}
